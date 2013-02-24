@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+	
+	<ui:composition template="/_template.xhtml">
+		<ui:define name="mostraUsuarioLogado" />
+	
+		<ui:define name="corpo">
+			<h2>Login do Sistema</h2>
+			
+			<h:form id="formLogin">
+				<p:fieldset legend="Login">
+					<p:growl autoUpdate="true" />
+					<h:panelGrid columns="2" styleClass="campos">
+						<h:outputLabel value="Login:" />
+						<p:inputText value="#{loginBean.usuario.login}" style="width: 150px"/>
+						
+						<h:outputLabel value="Senha:" />
+						<p:keyboard value="#{loginBean.usuario.senha}" password="true" style="width: 150px"/>
+						
+						<h:outputText value="" />
+						<p:commandButton value="Efetuar Login" action="#{loginBean.efetuaLogin}" style="width: 115px" />
+					</h:panelGrid>
+				</p:fieldset>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</html>

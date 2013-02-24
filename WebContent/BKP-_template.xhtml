@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Sistemas de Notas Fiscais</title>
+	
+	<h:outputStylesheet name="style.css" library="css" />
+</h:head>
+<h:body>
+	<div id="cabecalho">
+		<h:graphicImage name="logo-uber.png" library="imagens" id="logoCompany"/>
+	</div>
+	
+	<h:form id="formTemplate">
+		<p:menubar rendered="#{not empty loginBean.usuario.login}">
+			<p:menuitem value="Produtos" url="produto.xhtml" />
+			<p:submenu label="Notas Fiscais" >
+				<p:menuitem value="Cadastro" url="notafiscal.xhtml" />
+				<p:menuitem value="Listagem" url="listanotas.xhtml" />
+			</p:submenu>
+			<p:submenu label="Configura��es">
+				<p:menuitem value="Cadastrar usu�rio" url="#" disabled="#{loginBean.usuario.nivelAcesso ne 3}"/>
+				<p:menuitem value="Alterar senha" onclick="dialogAlterarSenha.show()" />
+			</p:submenu>
+			<p:menuitem value="Sair" action="#{loginBean.logout}" />
+		</p:menubar>
+		
+		<p:dialog modal="true" widgetVar="dialogAlterarSenha" header="Alterar Senha" closable="false" >
+			<h:panelGrid columns="2" id="displayAlterarSenha" >
+				<h:outputText value="Senha atual:" />
+				<p:password id="pwAtual" feedback="false" size="15" 
+					value="#{alteraUsuarioBean.senhaAtual}" />
+
+				<h:outputText value="Nova Senha:" />
+				<p:password id="pwNova" feedback="false" size="15"
+					value="#{alteraUsuarioBean.novaSenha}" />
+
+				<h:outputText value="Confirmar senha:" />
+				<p:password id="pwConfirma" feedback="false" size="15"
+					value="#{alteraUsuarioBean.confirmaSenha}" />
+
+				<p:commandButton value="OK" actionListener="#{alteraUsuarioBean.alteraSenha(loginBean.usuario)}" 
+					oncomplete="dialogAlterarSenha.hide()" style="width: 80px;" update="formTemplate:displayAlterarSenha" />
+					
+				<p:commandButton value="Cancelar" actionListener="#{alteraUsuarioBean.calcelaAlteracaoDeSenha()}" 
+					oncomplete="dialogAlterarSenha.hide()" style="width: 80px;" update="formTemplate:displayAlterarSenha" />
+			</h:panelGrid>
+		</p:dialog>
+	</h:form>
+	
+	<div id="usuarioLogado">	
+		<ui:insert name="mostraUsuarioLogado">
+			<h:form>
+				Logado como: #{loginBean.usuario.login} Nivel: #{loginBean.usuario.nivelAcesso}
+			</h:form>
+		</ui:insert>
+	</div>
+	
+	<div id="conteudo">
+		<ui:insert name="corpo" />
+	</div>
+	
+	<div id="rodape">Copyright 2012. Todos os Direitos reservados a Renato Batista</div>
+</h:body>
+</html>

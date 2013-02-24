@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+	
+	<ui:composition template="/_template.xhtml">
+		<ui:define name="corpo">
+			<h:form id="dadosProduto" >
+				<h2>
+					<h:outputText value="Novo Produto" rendered="#{empty produtoBean.produto.id}" />
+					<h:outputText value="Editar Produto" rendered="#{not empty produtoBean.produto.id}" />
+				</h2>
+				
+				<p:fieldset legend="Dados do Produto" toggleable="true" >
+					<h:outputLabel value="Nome:" for="nome" />
+					<p:inputText id="nome" value="#{produtoBean.produto.nome}" />
+					
+					<h:outputLabel value="Descri��o:" for="descricao" />
+					<p:inputTextarea id="descricao" value="#{produtoBean.produto.descricao}" />
+					
+					<h:outputLabel value="Pre�o:" for="preco" />
+					<p:inputText id="preco" value="#{produtoBean.produto.preco}" />
+					
+					<p:commandButton value="Gravar" action="#{produtoBean.grava}" update="@form :listaProdutos" style="float: left; width: 80px"/>
+					
+					<p:commandButton value="Cancelar" action="#{produtoBean.cancelaEdicaoProduto}" 
+						rendered="#{not empty produtoBean.produto.id}" update="@form :listaProdutos" style="width: 80px; margin-left: 2px" />
+					
+				</p:fieldset>
+			</h:form>
+			
+			<h2>Listagem de Produtos</h2>
+			
+			<h:form id="listaProdutos">
+			
+				<p:contextMenu for="dtbProdutos">
+					<p:menuitem value="Alterar" update=":dadosProduto" 
+						icon="ui-icon-pencil" action="#{produtoBean.alteraProduto()}" />
+					
+					<p:menuitem value="Excluir" update="dtbProdutos" 
+						icon="ui-icon-trash" onclick="confirmarExclusao.show()"/>
+						
+					<p:separator />
+					<p:menuitem value="Cancelar" icon="ui-icon-cancel"/>					
+				</p:contextMenu>
+				
+				<p:dataTable id="dtbProdutos" value="#{produtoBean.dataModel}" var="varProduto" paginator="true" rows="5" 
+					rowKey="#{varProduto.id}" selection="#{produtoBean.produtoSelecionado}" selectionMode="single" >
+				
+					<p:columnGroup type="header">
+						<p:row>
+							<p:column headerText="ID" />
+							<p:column headerText="Produto" sortBy="#{varProduto.nome}" />
+							<p:column headerText="Descri��o" />
+							<p:column headerText="Pre�o" />
+							<p:column headerText="Edi��o" colspan="2" />
+						</p:row>
+					</p:columnGroup>
+					
+					<p:column style="width: 16px">
+						#{varProduto.id}
+					</p:column>					
+					
+					<p:column>
+						#{varProduto.nome}
+					</p:column>
+					
+					<p:column>
+						#{varProduto.descricao}
+					</p:column>
+					
+					<p:column>
+						<h:outputText value="#{varProduto.preco}" >
+							<f:convertNumber type="currency" currencySymbol="R$ " />
+						</h:outputText>
+					</p:column>			
+					
+					<p:column style="text-align: center; width: 20px;">
+							<p:commandButton title="Alterar" icon="ui-icon-pencil" 
+								update=":dadosProduto" action="#{produtoBean.alteraProduto}" >
+								
+								<f:setPropertyActionListener target="#{produtoBean.produtoSelecionado}" value="#{varProduto}" />
+							</p:commandButton>
+					</p:column>
+					
+					<p:column style="text-align: center; width: 20px;">
+						
+						<p:commandButton title="Remover" icon="ui-icon-trash" 
+							onclick="confirmarExclusao.show()" update=":listaProdutos:displayConfirmarExclusao" >
+							<f:setPropertyActionListener target="#{produtoBean.produtoSelecionado}" value="#{varProduto}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+				
+				<p:confirmDialog id="confirmDialogExcluir" header="Exclus�o" message="Deseja excluir o produto?"
+					severity="alert" widgetVar="confirmarExclusao" closable="false" >
+					
+					<h:panelGrid id="displayConfirmarExclusao" columns="2">
+						<f:facet name="header">
+							<h:outputText value="Dados do produto" />
+						</f:facet>
+						
+						<h:outputText value="Nome:" />
+						<h:outputText value="#{produtoBean.produtoSelecionado.nome}" />
+						
+						<h:outputText value="Pre�o:" />
+						<h:outputText value="#{produtoBean.produtoSelecionado.preco}"/>
+					</h:panelGrid>
+					
+					<p:commandButton value="Sim" action="#{produtoBean.remove()}" 
+						oncomplete="confirmarExclusao.hide()" update="listaProdutos:dtbProdutos" />
+						
+					<p:commandButton value="N�o" onclick="confirmarExclusao.hide()" />
+				</p:confirmDialog>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</html>	

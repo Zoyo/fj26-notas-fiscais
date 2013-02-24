@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+	  
+	<ui:composition template="/_template.xhtml">
+		<ui:define name="corpo">
+			<h:form>
+				<fieldset>
+					<legend>Dados da Nota</legend>
+					
+					<h:outputLabel value="CNPJ Cliente:" />
+					<p:inputMask value="#{notaFiscalBean.notaFiscal.cnpj}" mask="99.999.999/9999-99" 
+						converter="cnpj" converterMessage="CNPJ inv�lido" />
+					
+					<h:outputLabel value="Data:" />
+					<p:calendar pattern="dd/MM/yyyy" value="#{notaFiscalBean.notaFiscal.data.time}" locale="pt_BR"
+						readOnlyInputText="true" navigator="true" />
+					
+					<p:commandButton value="Avançar" action="#{notaFiscalBean.avancar}" update="@form" />
+				</fieldset>
+			</h:form>
+		</ui:define>
+	</ui:composition>	
+</html>

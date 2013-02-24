@@ -1,0 +1,5 @@
+<beans>
+	<interceptors>
+		<class>br.com.caelum.notasfiscais.interceptadores.TransactionInterceptor</class>
+	</interceptors>
+</beans>
